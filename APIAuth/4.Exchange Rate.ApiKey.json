@@ -1,0 +1,88 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Currency Rates"
+  },
+  "host": "openexchangerates.org",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/latest.json": {
+      "get": {
+        "summary": "Get exchange rates",
+        "description": "Get exchange rates",
+        "operationId": "testBasicAuth",
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "myApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "base",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "USD",
+              "GBP",
+              "EUR",
+              "AUD"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/rateResult"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "rateResult": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "object",
+          "properties": {
+            "USD": {
+              "type": "number"
+            },
+            "GBP": {
+              "type": "number"
+            },
+            "EUR": {
+              "type": "number"
+            },
+            "AUD": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "myApiKey": {
+      "type": "apiKey",
+      "name": "app_id",
+      "in": "query"
+    }
+  }
+}

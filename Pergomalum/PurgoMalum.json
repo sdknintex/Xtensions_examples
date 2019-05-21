@@ -1,0 +1,102 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "PurgoMalum",
+    "description": "The example sanitises text"
+  },
+  "host": "www.purgomalum.com",
+  "basePath": "/service",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/json" : {
+      "get" : {
+        "summary" : "Sanitize a comment",
+        "description" : "Remove obscenity from text",
+        "operationId": "SanitizeJSON",
+        "produces" : [
+          "application/json"
+        ],
+        "parameters" : [
+          {
+            "name": "text",
+            "description" : "The text to be sanitised",
+            "in" : "query",
+            "type": "string",
+            "x-ntx-summary": "Text to sanitize"
+          },
+          {
+            "name" : "add",
+            "description" : "Up to 10 words, or 200 characters",
+            "in" : "query",
+            "type" : "string",
+            "x-ntx-summary": "Additional blacklisted words"
+          },
+          {
+            "name" : "fill_text",
+            "description" : "(Max 20 characters)",
+            "in" : "query",
+            "type" : "string",
+            "x-ntx-summary": "Replacement text"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                 "result": {
+                    "type": "string"
+                  }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/containsprofanity" : {
+      "get" : {
+        "summary" : "Check a comment for profanity",
+        "description" : "Check for profanity in text",
+        "operationId": "CheckProfanity",
+        "produces" : [
+          "application/json"
+        ],
+        "parameters" : [
+          {
+            "name": "text",
+            "description" : "The text to be checked",
+            "in" : "query",
+            "type": "string",
+            "x-ntx-summary": "Text to check"
+          },
+          {
+            "name" : "add",
+            "description" : "Up to 10 words, or 200 characters",
+            "in" : "query",
+            "type" : "string",
+            "x-ntx-summary": "Additional blacklisted words"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+              
+            }
+          }
+        }
+      }
+    }
+  }
+}

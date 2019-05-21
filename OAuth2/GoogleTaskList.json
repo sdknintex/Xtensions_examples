@@ -1,0 +1,97 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Google Tasks"
+  },
+  "host": "www.googleapis.com",
+  "basePath": "/tasks/v1",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users/@me/lists": {
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "summary": "Create a Task List",
+        "description": "Create a Task List",
+        "operationId": "createTaskList",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "task",
+            "description": "Name of task list",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/list"
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "https://www.googleapis.com/auth/tasks"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "list": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "updated": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "id": {
+          "type": "string"
+        },
+        "selfLink": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "scopes": {
+        "https://www.googleapis.com/auth/tasks": "access to tasks"
+      }
+    }
+  }
+}

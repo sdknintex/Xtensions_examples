@@ -1,0 +1,85 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Gmail Messages"
+  },
+  "host": "hlpsmpfncwus.nintex.io ",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/GmailSendEmail": {
+      "post": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Send Gmail Message",
+        "description": "Send Gmail Message",
+        "operationId": "sendMessage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "description": "Message",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "To": {
+                  "description" : "Recipient's email address",
+                  "type": "string"
+                },
+                "Cc": {
+                  "description" : "Cc email address",
+                  "type": "string"
+                },
+                "Subject": {
+                  "description": "Email subject",
+                  "type": "string"
+                },
+                "Message": {
+                  "description": "Message to send",
+                  "type": "string"
+                }
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "gmailOauth2": [
+              "https://mail.google.com/"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "gmailOauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "scopes": {
+        "https://mail.google.com/": "access gmail"
+      }
+    }
+  }
+}

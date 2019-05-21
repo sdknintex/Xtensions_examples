@@ -1,0 +1,64 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Airport Data"
+  },
+  "host": "www.airport-data.com",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ap_info.json": {
+      "get": {
+        "summary": "Get airport info",
+        "description": "Get airport info",
+        "operationId": "getAirportInfo",
+        "produces": [
+          "application/json"
+        ],
+        "x-ntx-summary" : "Find airport information",
+        "parameters": [
+          {
+            "name": "iata",
+            "description": "Airport code",
+            "in": "query",
+            "type": "string",
+            "x-ntx-summary" : "Three-letter airport code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/airportInfo"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "airportInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-ntx-summary" : "Airport name"
+        },
+        "location": {
+          "type": "string",
+          "x-ntx-summary" : "Airport location"
+        },
+        "country": {
+          "type": "string",
+          "x-ntx-summary" : "Airport country"
+        }
+      }
+    }
+  }
+}			

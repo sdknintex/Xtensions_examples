@@ -1,0 +1,127 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Mailchimp Api",
+    "version": "1.0.0",
+    "title": "Mailchimp Api",
+    "contact": {}
+  },
+  "host": "us19.api.mailchimp.com",
+  "basePath" : "/3.0",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "security": [
+    {
+      "Basic authentication": []
+    }
+  ],
+  "paths": {
+    "/lists": {
+      "get": {
+        "summary": "Get Lists",
+        "operationId": "getLists",
+        "description": "List all lists in this account",
+        "parameters": [ ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "type" : "object",
+              "properties" : {
+                "lists": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lists/{listID}/members" :{
+      "post" : {
+        "summary": "Add a new member",
+        "operationId": "addMember",
+        "description": "Add a new member to your email list",
+        "parameters" : [
+          {
+            "name": "listID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-ntx-dynamic-values": {
+              "operationId": "getLists",
+              "value-path": "id",
+              "value-title": "name",
+              "value-collection" : "lists"
+            }
+          },
+          {
+            "name" : "NewMember",
+            "in": "body",
+            "schema" : {
+              "type" : "object",
+              "required" : [
+                "email_address",
+                "status"
+              ],
+              "properties" : {
+                "email_address" : {
+                  "type" : "string",
+                  "x-ntx-summary" : "Email address"
+                },
+                "status" : {
+                  "type" : "string",
+                  "x-ntx-summary" : "Subscription status",
+                  "enum" : [
+                    "subscribed"
+                  ]
+                },
+                "merge_fields" : {
+                  "type": "object",
+                  "properties": {
+                    "FNAME" : {
+                      "type" : "string",
+                      "x-ntx-summary" : "First name"
+                    },
+                    "LNAME" : {
+                      "type" : "string",
+                      "x-ntx-summary" : "Last name"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Basic authentication": {
+      "type": "basic"
+    }
+  }
+}

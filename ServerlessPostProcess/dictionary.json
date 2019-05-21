@@ -1,0 +1,73 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Get Definition"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "hlpsmpfncwus.nintex.io ",
+  "basePath": "/api",
+  "paths": {
+    "/DictionaryConnector": {
+      "post": {
+        "tags": [
+          "Websters Dictionary API"
+        ],
+        "summary": "Get a word definition.",
+        "description": "Returns a definition for a word.",
+        "operationId": "getDefinition",
+        "x-ntx-summary": "Get a word definition",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "description": "Word to define",
+            "x-ntx-summary": "Word to define.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "dictionaryApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with definition object.",
+            "schema": {
+              "title": "definition object",
+              "type": "object",
+              "properties": {
+                "word": {
+                  "type": "string",
+                  "x-ntx-visibility": "internal"
+                },
+                "part": {
+                  "type": "string",
+                  "x-ntx-visibility": "internal"
+                },
+                "definition": {
+                  "type": "string",
+                  "x-ntx-summary": "Definition"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "dictionaryApiKey": {
+      "type": "apiKey",
+      "name": "APIKEY",
+      "in": "query"
+    }
+  }
+}

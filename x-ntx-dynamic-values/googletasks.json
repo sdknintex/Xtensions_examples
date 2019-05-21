@@ -1,0 +1,165 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Google Tasks"
+    },
+    "host": "www.googleapis.com",
+    "basePath": "/tasks/v1",
+    "schemes": [
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users/@me/lists": {
+            "get": {
+                "tags": [
+                    "Task List"
+                ],
+                "summary": "List Tasklists",
+                "description": "List Tasklists",
+                "operationId": "getlists",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lists"
+                        }
+                    },
+                    "default": {
+                        "description": "Operation Failed"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "https://www.googleapis.com/auth/tasks"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/lists/{tasklist}/tasks": {
+            "post": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create Task",
+                "description": "Create Task",
+                "operationId": "createtask",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+				    {
+                        "name": "tasklist",
+                        "type": "string",
+                        "in": "path",
+						"x-ntx-summary": "Task List",
+						"description": "Task List",
+                        "required": true,
+                        "x-ntx-dynamic-values": {
+                            "operationId": "getlists",
+                            "value-collection": "items",
+                            "value-path": "id",
+                            "value-title": "title"
+                        }
+                    },
+                    {
+                        "name": "task",
+						"x-ntx-summary": "Task",
+						"description": "Title of task",
+                        "in": "body",					
+                        "schema": {
+                            "$ref": "#/definitions/taskSimple"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lists"
+                        }
+                    },
+                    "default": {
+                        "description": "Operation Failed"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "https://www.googleapis.com/auth/tasks"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "list": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "selfLink": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "lists": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/list"
+                    }
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "etag": {
+                    "type": "string"
+                }
+            }
+        },
+        "taskSimple": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "oauth2": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+            "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+            "scopes": {
+                "https://www.googleapis.com/auth/tasks": "access to tasks"
+            }
+        }
+    }
+}

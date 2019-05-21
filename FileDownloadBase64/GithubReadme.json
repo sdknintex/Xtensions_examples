@@ -1,0 +1,93 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "GitHub"
+  },
+  "host": "api.github.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes":[
+    "application/json"
+  ],
+  "paths" : {
+    "/user/repos": {
+      "get" : {
+        "summary": "List repositories",
+        "description": "List repositories",
+        "operationId": "listRepos",
+        "x-ntx-visibility": "internal",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema" : {}
+          }
+        }
+      }
+    },
+    "/repos/{user}/{repo}/readme" : {
+      "get" : {
+        "summary": "Download a file",
+        "description": "Download a file",
+        "operationId": "GetFile",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name" : "user",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "Repository owner",
+            "description" : "Owner",
+            "required" : true
+          },
+          {
+            "name" : "repo",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "Select repository",
+            "description" : "Repository",
+            "required" : true,
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listRepos",
+              "value-title" : "name",
+              "value-path" : "name"
+            }
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "content" : {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "basicAuth" : {
+      "type" : "basic"
+    }
+  }
+}

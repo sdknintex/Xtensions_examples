@@ -1,0 +1,67 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "2.5.0",
+        "title": "OpenWeatherMap"
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "api.openweathermap.org",
+    "basePath": "/data/2.5",
+    "security": [
+        {
+            "apikey_auth": []
+        }
+    ],
+    "paths": {
+        "/weather": {
+            "get": {
+                "tags": [
+                    "OpenWeatherMap (Weather)"
+                ],
+                "summary": "Get city weather.",
+                "description": "Returns weather for a city.",
+                "operationId": "getCityWeather",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "The name of the city.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "units",
+                        "in": "query",
+                        "description": "Indicate return data in 'metric' or 'imperial' units.",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "metric",
+                            "imperial"
+                        ]
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with weather object.",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "apikey_auth": {
+            "type": "apiKey",
+            "name": "APPID",
+            "in": "query"
+        }
+    }
+}

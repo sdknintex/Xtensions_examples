@@ -1,0 +1,179 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Flowdock"
+  },
+  "host": "api.flowdock.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "security" : [
+    {
+      "oauth2" : []
+    }
+  ],
+  "paths": {
+    "/flows" : {
+      "get": {
+        "summary" : "List flows",
+        "operationId": "listflows",
+        "description" : "List the flows available",
+        "x-ntx-visibility" : "internal",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/organizations" : {
+      "get": {
+        "summary" : "List organizations",
+        "operationId": "listorgs",
+        "description" : "List the organisations available",
+        "x-ntx-visibility" : "internal",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/flows/{organization}/{flow}/messages/": {
+      "get": {
+        "summary" : "List messages",
+        "operationId": "listmessages",
+        "description" : "List the messages available",
+        "x-ntx-visibility" : "internal",
+        "parameters" : [
+          {
+            "name": "organization",
+            "in": "path",
+            "type" : "string",
+            "required" : true,
+            "x-ntx-summary": "Select your organization",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listorgs",
+              "value-title": "parameterized_name",
+              "value-path": "parameterized_name"
+            }
+          },
+          {
+            "name": "flow",
+            "in": "path",
+            "type" : "string",
+            "required" : true,
+            "x-ntx-summary": "Select the flow (group)",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listflows",
+              "value-title": "parameterized_name",
+              "value-path": "parameterized_name"
+            }
+          },
+          {
+            "name": "event",
+            "in" :"query",
+            "type" : "string",
+            "enum" : ["message"],
+            "x-ntx-summary": "Select 'message'",
+            "required" : true
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/flows/{organization}/{flow}/messages/{message}/comments" :{
+      "post": {
+        "summary" : "Upload file",
+        "operationId": "addfile",
+        "description" : "Add a file via a comment",
+        "x-ntx-summary" : "Add a file to Flowdock ",
+        "parameters" : [
+          {
+            "name": "organization",
+            "type" : "string",
+            "in": "path",
+            "required" : true,
+            "x-ntx-summary": "Select your organization",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listorgs",
+              "value-title": "parameterized_name",
+              "value-path": "parameterized_name"
+            }
+          },
+          {
+            "name": "flow",
+            "type" : "string",
+            "in": "path",
+            "required" : true,
+            "x-ntx-summary": "Select the flow (group)",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listflows",
+              "value-title": "parameterized_name",
+              "value-path": "parameterized_name"
+            }
+          },
+          {
+            "name": "message",
+            "type" : "number",
+            "in": "path",
+            "required" : true,
+            "x-ntx-summary": "Select the message to add a file to",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listmessages",
+              "value-title": "content",
+              "value-path": "id"
+            }
+          },
+          {
+            "name": "body",
+            "in" : "body",
+            "required": true,
+            "schema" : {
+              "required" :[
+                "content",
+                "event"
+              ],
+              "properties" : {
+                "content":  {
+                  "type" : "string",
+                  "x-ntx-summary" : "File URL to upload",
+                  "format": "x-ntx-file-reference"
+                },
+                "event": {
+                  "type": "string",
+                  "enum": ["comment"],
+                  "x-ntx-summary": "Select 'comment'"
+                }
+              }
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions":{
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://api.flowdock.com/oauth/authorize",
+      "tokenUrl": "https://api.flowdock.com/oauth/token",
+      "scopes": { }
+    }
+  }
+}

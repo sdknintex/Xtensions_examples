@@ -1,0 +1,293 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "SharePoint Online"
+  },
+  "host": "SHAREPOINTHOST.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": [ "https" ],
+  "produces": [ "application/json" ],
+  "paths": {
+    "/ListItemCreate": {
+      "post": {
+        "tags": [
+          "List item",
+          "Create"
+        ],
+        "summary": "Create an item",
+        "description": "Create an item",
+        "operationId": "ListItemCreate",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "siteUrl",
+            "in": "query",
+            "description": "SharePoint site URL",
+            "required": true,
+            "x-ntx-summary": "SharePoint site URL",
+            "type": "string",
+            "x-ntx-dynamic-values": {
+              "operationId": "GetSites",
+              "value-path": "Url",
+              "value-title": "Url"
+            },
+            "x-ntx-ux-features": [ { "isCombobox": true } ]
+          },
+          {
+            "name": "listName",
+            "in": "query",
+            "description": "List name",
+            "required": true,
+            "x-ntx-summary": "List name",
+            "type": "string",
+            "x-ntx-dynamic-values": {
+              "operationId": "GetListsList",
+              "parameters": {
+                "siteUrl": {
+                  "parameter": "siteUrl"
+                }
+              },
+              "value-path": "Name",
+              "value-title": "Name"
+            }
+          },
+          {
+            "name": "folderPath",
+            "in": "query",
+            "description": "Folder path",
+            "required": false,
+            "x-ntx-summary": "Folder path",
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "body",
+            "description": "Add fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ItemCreate"
+            },
+            "x-ntx-summary": "Add fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "title": "Store item ID",
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "ID of the list item"
+                },
+                "Url": {
+                  "title": "Store item URL",
+                  "type": "string",
+                  "description": "URL of the list item"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "Sites.ReadWrite.All",
+              "Sites.Read.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/GetSites": {
+      "get": {
+        "x-ntx-visibility": "internal",
+        "tags": [ "Helper", "Sites" ],
+        "summary": "Get sites",
+        "description": "Get sites",
+        "operationId": "GetSites",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Sites"
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "Sites.ReadWrite.All",
+              "Sites.Read.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/GetLists/List": {
+      "get": {
+        "x-ntx-visibility": "internal",
+        "tags": [ "Helper", "Lists" ],
+        "summary": "Get lists",
+        "description": "Get lists",
+        "operationId": "GetListsList",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "siteUrl",
+            "in": "query",
+            "description": "SharePoint site URL",
+            "required": true,
+            "x-ntx-summary": "SharePoint site URL",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Lists"
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "Sites.ReadWrite.All",
+              "Sites.Read.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/GetFields/Create": {
+      "get": {
+        "x-ntx-visibility": "internal",
+        "tags": [ "Helper", "Fields" ],
+        "summary": "Get fields",
+        "description": "Get fields",
+        "operationId": "GetFieldsCreate",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "siteUrl",
+            "in": "query",
+            "description": "SharePoint site URL",
+            "required": true,
+            "x-ntx-summary": "SharePoint site URL",
+            "type": "string",
+            "x-ntx-dynamic-values": {
+              "operationId": "GetSites",
+              "value-path": "Url",
+              "value-title": "Url"
+            }
+          },
+          {
+            "name": "listName",
+            "in": "query",
+            "description": "List name",
+            "required": true,
+            "x-ntx-summary": "List name",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/ItemCreate"
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "Sites.ReadWrite.All",
+              "Sites.Read.All"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Sites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "Title": {
+            "type": "string"
+          },
+          "Url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Lists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ItemCreate": {
+      "type": "object",
+      "x-ntx-dynamic-schema": {
+        "operationId": "GetFieldsCreate",
+        "parameters": {
+          "siteUrl": {
+            "parameter": "siteUrl"
+          },
+          "listName": {
+            "parameter": "listName"
+          }
+        },
+        "value-path": "Schema/Items"
+      },
+      "x-ntx-ux-features": [ { "isMultiSelect": true } ]
+    }
+  },
+  "securityDefinitions": {
+    "functions_auth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://www.nintex.com",
+      "scopes": {
+        "Sites.ReadWrite.All": "modify sites",
+        "Sites.Read.All": "read sites"
+      }
+    }
+  }
+}

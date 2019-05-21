@@ -1,0 +1,55 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Airport Data"
+  },
+  "host": "www.airport-data.com",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ap_info.json": {
+      "get": {
+        "summary": "Get airport info",
+        "description": "Get airport info",
+        "operationId": "getAirportInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iata",
+            "in": "query",
+            "type": "string",
+            "description": "Three-letter code: JFK",
+            "pattern" : "^[A-Z]{3}$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

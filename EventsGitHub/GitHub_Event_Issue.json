@@ -1,0 +1,299 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "github Api",
+    "version": "1.0.0",
+    "title": "github Api",
+    "contact": {}
+  },
+  "host": "api.github.com",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "security": [
+    {
+    "Basic authentication": []
+    }
+  ],
+  "paths": {
+    "/users/{username}/repos": {
+      "get": {
+        "summary": "GetUserRepositories",
+        "operationId": "GetUserRepos",
+        "description": "Get user repositories",
+        "parameters": [
+          {
+            "name": "type",
+            "x-ntx-summary": "owner relation to repository",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "owner",
+            "enum": [
+              "all",
+              "owner",
+              "member"
+            ]
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "type": "array",
+              "items": {
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "name of the repo"
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "id of the repo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/users": {
+      "get": {
+        "summary": "GetUsers",
+        "operationId": "GetUsers",
+        "description": "Search for users by a query",
+        "parameters": [
+          {
+            "name": "q",
+            "x-ntx-summary": "lookup user by name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "user name to look up"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "required": [
+                "items"
+              ],
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "id",
+                      "login"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/hooks": {
+      "post": {
+        "summary": "CreateGithubWebhook",
+        "operationId": "CreateGithubWebhook",
+        "x-ntx-trigger": "single",
+        "x-ntx-notification-content": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type" : "string"
+              },
+              "issue" : {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              },
+              "label" : {
+                "type" : "object",
+                "properties": {
+                  "name" : {
+                    "type" : "string"
+                  }
+                }
+              },
+              "repository" : {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "GitHub issues",
+        "consumes": [],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-ntx-summary": "repository owner",
+            "x-ntx-dynamic-values": {
+              "operationId": "GetUsers",
+              "value-collection": "items",
+              "value-path": "login",
+              "value-title": "login"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "x-ntx-visibility": "internal",
+            "default": "nintex"
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-ntx-dynamic-values": {
+              "operationId": "GetUserRepos",
+              "value-path": "name",
+              "value-title": "name",
+              "parameters": {
+                "username": {
+                  "parameter": "owner"
+                }
+              }
+            }
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "active",
+                "config",
+                "events",
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "web"
+                },
+                "events": {
+                  "type": "array",
+                  "description": "Determines what events the hook is triggered for",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "issues"
+                    ]
+                  }
+                },
+                "active": {
+                  "type": "boolean",
+                  "description": "Determines if notifications are sent when the webhook is triggered.",
+                  "default": true
+                },
+                "config": {
+                  "required": [
+                    "content_type",
+                    "url"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "x-ntx-visibility": "internal",
+                      "default": "{{x-ntx-event-callback-url}}"
+                    },
+                    "content_type": {
+                      "type": "string",
+                      "default": "json",
+                      "x-ntx-visibility": "internal",
+                      "enum": [
+                        "json",
+                        "form"
+                      ]
+                    },
+                    "secret": {
+                      "type": "string",
+                      "description": "If provided, the secret will be used as the key to generate the HMAC hex digest value"
+                    },
+                    "insecure_ssl": {
+                      "type": "integer",
+                      "description": "Determines whether the SSL certificate of the host for url will be verified",
+                      "default": 0,
+                      "enum": [
+                        0,
+                        1
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Basic authentication": {
+      "type": "basic"
+    }
+  }
+}

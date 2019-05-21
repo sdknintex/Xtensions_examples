@@ -1,0 +1,94 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "WolframAlpha",
+    "description": "This example sends a question to WolframAlpha"
+  },
+  "host": "api.wolframalpha.com",
+  "basePath": "/v2",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/query" : {
+      "get" : {
+        "summary": "WolframAlpha query",
+        "description": "Answer a question",
+        "operationId": "WolframAlpha",
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "myApiKey": []
+          }
+        ],
+        "parameters": [
+            {
+                "name": "input",
+                "in": "query",
+                "type": "string",
+                "required" : true,
+                "description" : "Type your question"
+            },
+            {
+                "name": "output",
+                "in" : "query",
+                "type" : "string",
+                "required" : true,
+                "x-ntx-summary": "Select JSON format",
+                "enum": [
+                  "json"
+                ]
+            },
+            {
+                "name": "includepodid",
+                "in" : "query",
+                "type" : "string",
+                "required" : true,
+                "x-ntx-summary": "Select Result",
+                "enum": [
+                  "Result"
+                ]
+            }
+            
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+              
+              
+            }
+          },
+          "404" : {
+            "description": "404 Error"
+            
+          },
+          "401" : {
+            "description": "Authorization Error"
+            
+          }
+          
+        }
+      }
+    }
+  },
+ 
+  "securityDefinitions": {
+    "myApiKey": {
+      "type": "apiKey",
+      "name": "appid",
+      "in": "query"
+    }
+  }
+  
+}

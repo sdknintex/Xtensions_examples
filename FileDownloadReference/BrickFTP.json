@@ -1,0 +1,81 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "BrickFTP"
+  },
+  "host": "nintexxtensions.brickftp.com",
+  "basePath": "/api/rest/v1",
+  "schemes": [
+    "https"
+  ],
+  "consumes" : [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "security" : [
+    {
+      "basicAuth": []
+    }
+  ],
+  "paths": {
+    "/folders/" : {
+      "get" :{
+        "summary" : "List files in folder",
+        "description" : "List files in folder",
+        "operationId": "listFiles",
+        "x-ntx-visibility": "internal",
+        "parameters": [],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/files/{filepath}" : {
+      "get" : {
+        "summary" : "Download file",
+        "description" : "Download file",
+        "operationId": "downloadFile",
+        "parameters": [
+          {
+            "name": "filepath",
+            "in" : "path",
+            "type" : "string",
+            "required" : true,
+            "x-ntx-summary": "Select the file",
+            "x-ntx-dynamic-values" : {
+              "operationId" : "listFiles",
+              "value-title": "display_name",
+              "value-path": "path"
+            }
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema" :{
+              "type": "object",
+              "properties" : {
+                "download_uri" :
+                {
+                  "type" : "string",
+                  "x-ntx-summary" : "Downloaded file",
+                  "format" : "x-ntx-file-reference"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions":{
+    "basicAuth" : {
+      "type" : "basic"
+    }
+  }
+}

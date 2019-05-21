@@ -1,0 +1,195 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Asana"
+  },
+  "host": "app.asana.com",
+  "basePath": "/api/1.0",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes":[
+    "application/json"
+  ],
+  "security" : [
+    {
+      "oauth2" : []
+    }
+  ],
+  "paths" : {
+    "/workspaces" : {
+      "get" :{
+        "summary": "List workspaces",
+        "description": "Lists all workspaces the authenticated user can access",
+        "operationId": "ListWorkspaces",
+        "x-ntx-visibility" : "internal",
+        "parameters": [],
+        "responses"  : {
+          "200": {
+            "description": "OK",
+            "schema" : {
+              "type": "array",
+              "items" : {
+                "type": "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "string"
+                  },
+                  "name" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "summary": "List users who can access this workspace",
+        "description": "Lists all users who can access this workspace",
+        "operationId": "ListUsers",
+        "x-ntx-visibility" : "internal",
+        "parameters": [ ],
+        "responses"  : {
+          "200": {
+            "description": "OK",
+            "schema" : {
+              "type": "array",
+              "items" : {
+                "type": "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "string"
+                  },
+                  "name" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks" : {
+      "post" :{
+        "summary": "Create a task",
+        "description": "Create a task assigned to the selected user",
+        "operationId": "CreateTask",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "task",
+            "in": "body",
+            "schema": {
+              "required" :[
+                "workspace",
+                "assignee",
+                "name"
+              ],
+              "properties": {
+                "workspace": {
+                  "type": "string",
+                  "x-ntx-summary": "Workspace to add task to",
+                  "x-ntx-dynamic-values": {
+                    "operationId": "ListWorkspaces",
+                    "value-collection": "data",
+                    "value-path": "id",
+                    "value-title": "name"
+                  }
+                },
+                "assignee" :
+                {
+                  "x-ntx-summary" : "Person to assign the task to",
+                  "type": "string",
+                  "x-ntx-dynamic-values": {
+                    "operationId": "ListUsers",
+                    "value-collection": "data",
+                    "value-path": "id",
+                    "value-title": "name"
+                  }
+                },
+                "name" : {
+                  "type": "string",
+                  "x-ntx-summary": "Title of the task"
+                },
+                "notes" : {
+                  "type": "string",
+                  "x-ntx-summary": "Task detail"
+                }
+              }
+            }
+          }
+        ],
+        "responses"  : {
+          "201": {
+            "description": "Created Task",
+            "schema" : {
+              "type": "object",
+              "properties" : {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "x-ntx-summary": "Task id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{task_id}/attachments" :{
+      "post" :{
+        "summary": "Attach a file to a task",
+        "description": "Attach a file to a specified task",
+        "operationId": "AttachFile",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "task_id",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "Task id",
+            "description": "Task",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "type": "file",
+            "required": true,
+            "description": "The file to attach."
+          }
+        ],
+        "responses"  : {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://app.asana.com/-/oauth_authorize",
+      "tokenUrl": "https://app.asana.com/-/oauth_token",
+      "scopes": { }
+    }
+  }
+}

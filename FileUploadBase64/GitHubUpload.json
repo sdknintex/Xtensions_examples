@@ -1,0 +1,124 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "GitHub"
+  },
+  "host": "api.github.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/user/repos": {
+      "get" : {
+        "summary": "List repositories",
+        "description": "List repositories",
+        "operationId": "listRepos",
+        "x-ntx-visibility": "internal",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/contents/{path}" : {
+      "put" :{
+        "summary": "Upload a file",
+        "description": "Upload a file",
+        "operationId": "UploadFile",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "GitHub username",
+            "description" : "Owner",
+            "required" : true
+          },
+          {
+            "name": "repo",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "Select repository",
+            "description" : "Repository",
+            "required" : true,
+            "x-ntx-dynamic-values": {
+              "operationId": "listRepos",
+              "value-path": "name",
+              "value-title": "name"
+            }
+          },
+          {
+            "name" : "path",
+            "type": "string",
+            "in": "path",
+            "x-ntx-summary": "Type a file name",
+            "description" : "Path",
+            "required" : true
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "description" : "body",
+            "required" : true,
+            "schema" : {
+              "type": "object",
+              "properties" : {
+                "message" : {
+                  "type": "string",
+                  "x-ntx-summary": "Commit message"
+                },
+                "content" :{
+                  "type" : "string",
+                  "format": "byte",
+                  "x-ntx-summary": "File to upload"
+                }
+              }
+            }
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "content" : {
+                  "type": "object",
+                  "properties": {
+                    "url" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "basicAuth" : {
+      "type" : "basic"
+    }
+  }
+}

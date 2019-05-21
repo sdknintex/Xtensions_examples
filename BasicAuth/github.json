@@ -1,0 +1,121 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "GitHub"
+  },
+  "host": "api.github.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes":[
+    "application/json"
+  ],
+  "paths" : {
+    "/user/repos" : {
+      "post" : {
+        "summary": "Create a repository",
+        "description": "Create a new repository",
+        "operationId": "createRepo",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [
+
+          {
+            "name":"body",
+            "in":"body",
+            "schema": {
+              "required" :["name"],
+              "properties":{
+                "name" :{
+                  "type":"string",
+                  "x-ntx-summary":"Repository name"
+                },
+                "description" :{
+                  "type":"string",
+                  "x-ntx-summary":"Description of repository"
+                },
+                "has_issues" :{
+                  "type":"boolean",
+                  "x-ntx-summary":"Can this repository have issues?"
+                },
+                "auto_init" :{
+                  "type":"boolean",
+                  "x-ntx-summary":"Create an empty README?"
+                }
+              }
+            }
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+
+    },
+    "/repos/{owner}/{repo}/issues" : {
+      "post" :{
+        "summary": "Create issue",
+        "description": "Creates an issue in the given repository",
+        "operationId": "createIssue",
+        "security" : [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters":[
+          {
+            "name":"owner",
+            "type":"string",
+            "in":"path",
+            "required":true,
+            "x-ntx-summary":"Username"
+          },
+          {
+            "name":"repo",
+            "type":"string",
+            "in":"path",
+            "required":true,
+            "x-ntx-summary":"Repository name"
+          },
+          {
+            "name":"body",
+            "in":"body",
+            "schema": {
+              "required" :["title"],
+              "properties":{
+                "title" :{
+                  "type":"string",
+                  "x-ntx-summary":"Title of issue"
+                },
+                "body" :{
+                  "type":"string",
+                  "x-ntx-summary":"Description of issue"
+                }
+              }
+            }
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "basicAuth" : {
+      "type" : "basic"
+    }
+  }
+}

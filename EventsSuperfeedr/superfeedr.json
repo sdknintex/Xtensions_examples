@@ -1,0 +1,80 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Superfeedr"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "push.superfeedr.com",
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "Subscribe to RSS",
+        "description": "Subscribe to RSS",
+        "operationId": "subscribe",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "x-ntx-trigger": "single",
+        "x-ntx-notification-content": {
+          "schema": {
+            "type": "object",
+            "x-ntx-summary": "Rss Notification"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hub.mode": {
+                  "type": "string",
+                  "default": "subscribe",
+                  "x-ntx-visibility": "internal"
+                },
+                "hub.topic": {
+                  "type": "string",
+                  "default": "http://lorem-rss.herokuapp.com/feed",
+                  "x-ntx-summary": "Rss Feed URL"
+                },
+                "hub.callback": {
+                  "type": "string",
+                  "default": "{{x-ntx-event-callback-url}}",
+                  "x-ntx-visibility": "internal"
+                },
+                "format": {
+                  "type": "string",
+                  "default": "json",
+                  "x-ntx-visibility": "internal"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "basic_auth": []
+    }
+  ],
+  "securityDefinitions": {
+    "basic_auth": {
+      "type": "basic"
+    }
+  }
+}
