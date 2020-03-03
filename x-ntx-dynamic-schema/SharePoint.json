@@ -275,8 +275,7 @@
           }
         },
         "value-path": "Schema/Items"
-      },
-      "x-ntx-ux-features": [ { "isMultiSelect": true } ]
+      }
     }
   },
   "securityDefinitions": {
