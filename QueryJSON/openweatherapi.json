@@ -5,7 +5,7 @@
         "title": "OpenWeatherMap"
     },
     "schemes": [
-        "http"
+        "https"
     ],
     "host": "api.openweathermap.org",
     "basePath": "/data/2.5",
