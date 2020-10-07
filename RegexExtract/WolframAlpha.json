@@ -8,7 +8,7 @@
   "host": "api.wolframalpha.com",
   "basePath": "/v2",
   "schemes": [
-    "http"
+    "https"
   ],
   "consumes": [
     "application/json"
