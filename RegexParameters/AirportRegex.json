@@ -7,7 +7,7 @@
   "host": "www.airport-data.com",
   "basePath": "/api",
   "schemes": [
-    "http"
+    "https"
   ],
   "produces": [
     "application/json"
