@@ -69,7 +69,7 @@
         "description" : "Check for profanity in text",
         "operationId": "CheckProfanity",
         "produces" : [
-          "application/json"
+          "text/plain"
         ],
         "parameters" : [
           {
